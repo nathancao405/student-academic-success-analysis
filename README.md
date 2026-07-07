@@ -28,6 +28,7 @@ This project explores the factors that are most strongly associated with student
 - `Project1.Rmd` – Source code and analysis
 - `Project1.html` – Interactive HTML report
 - `README.md` – Project overview
+- `Student_performance_data _.csv` - Student dataset
 
 ## Key Findings
 The analysis identified several factors that were significantly associated with student GPA. Exploratory data analysis and multiple linear regression were used to evaluate the relationship between academic performance and student characteristics. The project demonstrates how statistical methods can be applied to extract meaningful insights from educational data.
