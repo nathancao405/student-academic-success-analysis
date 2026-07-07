@@ -1,0 +1,170 @@
+---
+title: "What Factors Are Most Associated with Student Academic Success?"
+author: "Nathan Cao"
+date: '`r Sys.Date()`'
+output: html_document
+---
+
+## Introduction
+The purpose of this project is to determine which factors are most strongly associated with student academic success. Student success will be measured using GPA. By analyzing variables such as study time, absences, parental support, tutoring, and extracurricular activities, I will identify which factors contribute most to academic performance.
+
+## Loading the Data
+
+```{r}
+student <- read.csv("Student_performance_data _.csv")
+
+head(student)
+summary(student)
+```
+
+### Data Cleaning
+
+```{r}
+sum(is.na(student))
+```
+
+Removing missing values before evaluation.
+
+# Exploratory Data Analysis
+
+## Distribution of GPA
+
+```{r}
+hist(student$GPA,
+     main = "Distribution of GPA",
+     xlab = "GPA")
+```
+
+This histogram shows the distribution of GPA among students.
+
+## Study Time vs GPA
+
+```{r}
+plot(student$StudyTimeWeekly,
+     student$GPA,
+     main = "Study Time vs GPA",
+     xlab = "Study Time Per Week",
+     ylab = "GPA",
+     col = "blue")
+
+abline(
+  lm(GPA ~ StudyTimeWeekly, data = student),
+  col = "red"
+)
+```
+
+This graph shows the relationship between study time and GPA. there is a very slight correlation.
+
+## Absences vs GPA
+
+```{r}
+plot(student$Absences,
+     student$GPA,
+     main = "Absences vs GPA",
+     xlab = "Absences",
+     ylab = "GPA",
+     col = "green")
+
+abline(
+  lm(GPA ~ Absences, data = student),
+  col = "red"
+)
+```
+
+This graph shows a strong correlation between absences and GPA. 
+
+## GPA with Parental Support
+
+```{r}
+boxplot(GPA ~ ParentalSupport,
+        data = student,
+        main = "GPA by Parental Support",
+        xlab = "Parental Support Level",
+        ylab = "GPA",
+        col = "yellow")
+```
+
+This graph shows a strong correlation between parental support and GPA. 
+
+## GPA with Tutoring
+
+```{r}
+boxplot(GPA ~ Tutoring,
+        data = student,
+        main = "GPA by Tutoring",
+        xlab = "Tutoring",
+        ylab = "GPA",
+        col = "purple")
+```
+
+This graph shows a positive correlation between getting tutored and GPA.
+
+# Correlation Analysis
+
+```{r}
+cor(student[, c(
+  "GPA",
+  "StudyTimeWeekly",
+  "Absences",
+  "ParentalEducation",
+  "ParentalSupport"
+)])
+```
+
+The correlation matrix shows the relationships between GPA and several important variables.
+
+# Simple Regression Model
+
+```{r}
+model1 <- lm(
+  GPA ~ StudyTimeWeekly,
+  data = student
+)
+
+summary(model1)
+```
+
+This model uses study time as the only predictor of GPA.
+
+# Multiple Regression Model
+
+```{r}
+model2 <- lm(
+  GPA ~ StudyTimeWeekly +
+        Absences +
+        ParentalEducation +
+        ParentalSupport +
+        Tutoring +
+        Extracurricular +
+        Sports +
+        Music +
+        Volunteering,
+  data = student
+)
+
+summary(model2)
+```
+
+This model uses multiple factors to predict GPA.
+
+# Predicted vs Actual GPA
+
+```{r}
+student$PredictedGPA <- predict(model2)
+
+plot(student$GPA,
+     student$PredictedGPA,
+     main = "Actual vs Predicted GPA",
+     xlab = "Actual GPA",
+     ylab = "Predicted GPA")
+
+abline(0, 1, col = "red")
+```
+
+If the model is correct, the point will be close to the red line. 
+
+# Conclusion
+
+This project examined factors associated with student academic success. GPA was used as the measure of academic performance. Exploratory data analysis, correlation analysis, and regression modeling were used to investigate relationships between student characteristics and GPA.
+
+The results indicate that study time, absences, parental support, and other educational factors contribute to academic performance. The multiple regression model provided a stronger explanation of GPA than any single variable alone, suggesting that student success is influenced by multiple factors working together.
